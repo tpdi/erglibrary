@@ -29,6 +29,9 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 
 	private static final String CLASS_S_NOT_FOUND = "Class \'%s\' not found ";
 	private static final String EXC_MSG_UNEQUAL_NAMES = "%d names for %d enum constants; must be equal";
+	
+	// non-final so we can replace it (via reflection) during testing
+	private static ViewIdGenerator viewIdGenerator = AtomicIntViewIdGenerator.INSTANCE;
 
 	protected T defaultValue;
 	// While we can get them with defaultValue.getDeclaringClass().getEnumConstants(),
@@ -147,7 +150,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		this.defaultValue = defaultValue;
 		this.enumConstants = defaultValue.getDeclaringClass().getEnumConstants();
-		this.idOffset = Pre17Support.generateViewIds(enumConstants.length);
+		this.idOffset = viewIdGenerator.generateViewIds(enumConstants.length);
 		
 		if (rbLayout == -1) {
 			rbLayout = getOrientation() == LinearLayout.VERTICAL 
