@@ -56,7 +56,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		super(context, attrs);
 		
 		if(isInEditMode()) {
-			init(context, (T) Sample.IN, -1, -1);
+			return; //init(context, (T) Sample.IN, -1, -1);
 		} else {
 			TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EnumRadioGroup);
 			String enumClassName = a.getString(R.styleable.EnumRadioGroup_enumClassName);
@@ -150,6 +150,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		this.defaultValue = defaultValue;
 		this.enumConstants = defaultValue.getDeclaringClass().getEnumConstants();
+		this.idOffset = Pre17Support.generateViewIds(enumConstants.length);
 		
 		if (rbLayout == -1) {
 			rbLayout = getOrientation() == LinearLayout.VERTICAL 
@@ -166,8 +167,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		}
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
-		ids = new int[enumConstants.length];
-		//startId = ensureConsecutiveIdsStartWith(enumConstants.length);
 		
 		int offset = 0;
 		for( T ec : enumConstants) {
@@ -175,8 +174,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 			// and to 
 			RadioButton rb = (RadioButton) inflater.inflate(rbLayout, this, false);
 			
-			int id = (VERSION.SDK_INT >= 17) ? generateViewId17() : generateViewIdPre17();
-			ids[offset] = id;
+			int id = idOffset + offset;
 			rb.setId(id);
 			
 			String name = names[offset];
@@ -199,10 +197,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	protected T resIdToEnumConstant(int resId) {
 		// this was a linear search. Ick.
 		// now it's a binary search. Fortunately we have monotonic-increasing ids.
-		int place = Arrays.binarySearch(ids, resId);
-		if( place >0 ) return getEnumConstants()[place];
-		
-		throw new IllegalStateException("Can't map resId to enum constant");
+		return enumConstants[resId - idOffset];
 	}
 	
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -263,11 +258,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			EnumRadioGroup<T> erg = (EnumRadioGroup<T>) group;
-			onCheckedChanged(erg, erg.getCheckedValue());
+			onCheckedChanged(erg, erg.getCheckedValue(), checkedId);
 			
 		}
 		
-		public abstract void onCheckedChanged(EnumRadioGroup<T> group, T currentValue);
+		public abstract void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
 		
 	}
 	

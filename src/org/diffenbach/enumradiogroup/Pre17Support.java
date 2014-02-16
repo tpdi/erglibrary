@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Pre17Support {
 
 	//taken from  View.java
-	static public AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+	static public AtomicInteger sNextGeneratedId = new AtomicInteger(0x00FFFFFF/4 + (4-0x00FFFFFF%4));
 	
     public static int generateViewId() {
         for (;;) {
