@@ -198,12 +198,15 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		super.onFinishInflate();
 		if( ! isInEditMode()) {
 			int childCount = getChildCount();
+			boolean foundDummy = false;
 			for( int xmlChild = enumConstants.length; xmlChild < childCount; ++xmlChild) {
 				View child = getChildAt(xmlChild);
 				if(isDummy(child)) {
 					removeView(child);
-					break;
-				} else {
+					--xmlChild;
+					--childCount;
+					foundDummy = true;
+				} else if( !foundDummy){
 					removeView(child);
 					addView(child, xmlChild - enumConstants.length);
 				}

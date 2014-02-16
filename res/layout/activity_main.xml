@@ -57,9 +57,9 @@
                     tpdi:enumClassName="org.diffenbach.enumradiogroup.MainActivity$Agreed"
                     tpdi:enumDefaultValueString="NO" />
                 <!-- we neglected to include the names array, so we we see the Enum's toString -->
-                <!-- notice the class name: Java standard is that inner classes are --> 
-				<!--  separated from thier outer class by a dollar sign, not a dot -->
-				
+                <!-- notice the class name: Java standard is that inner classes are -->
+                <!-- separated from thier outer class by a dollar sign, not a dot -->
+
                 <TextView
                     android:id="@+id/agreed1_text"
                     android:layout_width="wrap_content"
@@ -99,19 +99,25 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:text="@string/sexlabel" />
-                    
 
-                    
-                    <!-- they will all go before the Enum Radio buttons-->
-                    <!-- unless they're after a dummy RadioButton with no id-->
-                    
-                    <RadioButton 
-                        android:text="I am the dummy, I will be removed" 
+                    <!-- they will all go before the Enum Radio buttons -->
+                    <!-- unless they're after a dummy RadioButton: its tag must be DUMMY. -->
+                    <!-- Anything after the first dummy RadioButton -->
+                    <!-- will go after the Enum RadioButtons -->
+                    <!-- and all dummy RadioButtons will be removed. -->
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:tag="DUMMY"
-                        android:visibility="gone"
-                        android:height="0dp"
-                        android:width="0dp"/>
-                    
+                        android:text="DUMMY" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="DUMMY"
+                        android:text="DUMMY2" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +125,26 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:text="After" />
-                    
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="DUMMY"
+                        android:text="DUMMY3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="After2" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="DUMMY"
+                        android:text="DUMMY3" />
                 </org.diffenbach.enumradiogroup.EnumRadioGroup>
 
                 <TextView
