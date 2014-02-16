@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RadioButtonGroupFiller</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string-array name="agreed">
+        <item >Yes</item>
+        <item >No</item>
+        <item >Maybe</item>
+    </string-array>
+    
+    <string-array name="agreed_without_no">
+        <item >Yes</item>
+        <item ></item>
+        <item >Maybe</item>
+    </string-array>
+    
+    <string-array name="pie">
+        <item >Apple</item>
+        <item >Cherry</item>
+        <item >Potato</item>
+    </string-array>
+    
+    <string-array name="sex">
+        <item >Required</item>
+        <item >Female</item>
+        <item >Male</item>
+    </string-array>
+
+</resources>

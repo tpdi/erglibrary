@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EnumRadioGroup">           
+        <attr name="enumClassName" format="string" />
+        <attr name="enumDefaultValueString" format="string" />
+        <attr name="enumDefaultIsShown" format="boolean" />
+        <attr name="radioButtonLayout" format="reference" />
+        <attr name="radioButtonNames" format="reference" />
+    </declare-styleable>
+</resources>  
