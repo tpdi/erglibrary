@@ -3,16 +3,12 @@ package org.diffenbach.enumradiogroup;
 import java.util.Arrays;
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
-import android.os.Build.VERSION;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,7 +26,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 
 	private static final String CLASS_S_NOT_FOUND = "Class \'%s\' not found ";
-	private static final String EXP_MSG_UNEQUAL_NAMES = "%d names for %d enum constants; must be equal";
+	private static final String EXC_MSG_UNEQUAL_NAMES = "%d names for %d enum constants; must be equal";
 
 	T defaultValue;
 	// While we can get them with defaultValue.getDeclaringClass().getEnumConstants(),
@@ -85,9 +81,9 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	@Override
 	public void check(int id) {
 		if(id == -1) clearCheck();
-		//else if(id >= getEnumConstants().length) {
-		//	throw new IllegalArgumentException("Argument to \'check\' must be in range -1 to count of enum's constants -1");
-		//}
+		else if(id < idOffset || id >= idOffset + getEnumConstants().length) {
+			throw new IllegalArgumentException("Argument to \'check\' must be in range -1 to count of enum's constants -1");
+		}
 		else super.check(id);
 	}
 	
@@ -163,7 +159,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		if(names.length != enumConstants.length) {
 			throw new IllegalArgumentException(
-					String.format(EXP_MSG_UNEQUAL_NAMES, names.length, enumConstants.length));
+					String.format(EXC_MSG_UNEQUAL_NAMES, names.length, enumConstants.length));
 		}
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
@@ -171,7 +167,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		int offset = 0;
 		for( T ec : enumConstants) {
 			// annoyingly, to get layoutparams, we need to inflate this way
-			// and to 
 			RadioButton rb = (RadioButton) inflater.inflate(rbLayout, this, false);
 			
 			int id = idOffset + offset;
@@ -181,7 +176,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 			if(name.length() > 0 ) rb.setText(name);
 			else rb.setVisibility(View.GONE); //poor XML-man's filter
 			
-			// by pass RadioGroups's special addView, so we don't have to muck with LayoutParams
+			// bypass RadioGroups's special addView, so we don't have to muck with LayoutParams
 	
 			addView(rb);
 			
@@ -196,60 +191,15 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	
 	protected T resIdToEnumConstant(int resId) {
 		// this was a linear search. Ick.
-		// now it's a binary search. Fortunately we have monotonic-increasing ids.
+		// then it was a binary search. Fortunately we have monotonic-increasing ids.
+		// now it's a subtraction!
 		return enumConstants[resId - idOffset];
-	}
-	
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-	private int generateViewId17() {
-		return View.generateViewId();
-	}
-	
-	// We need our ids to be monotonic increasing
-	// and there's a very small chance that generateViewId() will rollover
-	// and we coan't sort them, because that will scramble our
-	// ordinal -> id lookup.
-	// So we're going to generate them all at once
-	// and keep doing it until we are monotonic increasing.
-	// Even better would be consecutive, but we can't guarantee that.
-	// Even better would be starting from zero
-	private int[] generateAllViewIdsPre17(int idsNeeded) {
-		int[] ret = new int[idsNeeded];
-		int first = generateViewIdPre17();
-		do {
-			for(int i = 0 ; i < idsNeeded; ++i)
-				ret[i] = Pre17Support.generateViewId();
-		} while( ret[0] > ret[idsNeeded -1]);
-		return ret;
-	}
-	
-	private int generateViewIdPre17() {
-		return Pre17Support.generateViewId();
 	}
 	
 	private T[] getEnumConstants() {
 		return enumConstants;
 	}
 
-
-	/*
-	private int ensureConsecutiveIdsStartWith(int n) {
-		int i = 0 ;
-		int start = View.generateViewId();
-		int last = start;
-		while( i < 1024) {
-			while(++i < 1024) {
-				if(last - start + 1 == n) return start;
-				int next = View.generateViewId();
-				if(next != last + 1) {
-					start = last = next;
-					break;
-				}
-				last = next;
-			}
-		}
-		throw new IllegalArgumentException("bad times!");
-	}*/
 	
 	
 	public static abstract class OnCheckChangedListener<T extends Enum<T>> implements RadioGroup.OnCheckedChangeListener {
@@ -282,7 +232,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		@Override
 		public String toString() {
-			return "Includes all";
+			return "Predicate includes all";
 		};
 
 	};
@@ -324,11 +274,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		@Override
 		public String toString() {
-			return "Includes all but " + exclude.toString();
+			return "Predicate includes all but " + exclude.toString();
 		};
 	}
 	
-	// Hello! I am a hack to all the creation of generic array which are otherwise disallowed.
+	// Hello! I am a hack to allow the creation of generic array which are otherwise disallowed.
 	public static <T extends Enum<T>> DisplayPredicate<T>[] makeDisplayPredicateArray( DisplayPredicate<T>... dps) {
 		return dps;
 	}

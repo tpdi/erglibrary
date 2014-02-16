@@ -21,6 +21,14 @@ public class Pre17Support {
         }
     }
     
+	// We need our ids to be monotonic increasing
+	// and there's a very small chance that generateViewId() will rollover.
+	// We can't sort them increasing, because that will scramble our
+	// ordinal -> id lookup.
+	// So we're going to generate them all at once
+	// and keep doing it until we are monotonic increasing.
+	// No, even better,consecutive!
+	// Even better would be starting from zero, but android will recycle views.
     public static int generateViewIds(int numberNeeded) {
         for (;;) {
             final int result = sNextGeneratedId.get();

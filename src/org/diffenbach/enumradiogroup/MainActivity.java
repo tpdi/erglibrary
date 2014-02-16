@@ -63,19 +63,27 @@ public class MainActivity extends Activity {
 		programmaticPies.setOrientation(LinearLayout.HORIZONTAL);
 		
 		// See the setUpRadioGroupCallback for setting up callbacks.
-		// EnumRadioGroup.findById is a typesafe way to get an EnumRadioGroup.
+		// EnumRadioGroup.findById is a somewhat typesafe way to get an EnumRadioGroup.
 		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.agreed1), R.id.agreed1_text);
 		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
 		
 		
-		// we can make and keep references to typed filters that take the Enum class or Enum constants
+		// we can make, keep and reuse references to typed filters 
+		// that take the Enum class or Enum constants
 		pieFilters = EnumRadioGroup.makeDisplayPredicateArray(
 				EnumRadioGroup.includeAll(Pie.class),
 				EnumRadioGroup.includeAllBut(Pie.APPLE),
 				EnumRadioGroup.includeAllBut(Pie.APPLE, Pie.CHERRY)
 				); 
+		
+		// As filers are typed, this won't work:
+		// programmaticAgreeds.filter(pieFilters[0]);
+		// Neither will this:
+		// programmaticAgreeds.filter(EnumRadioGroup.includeAll(Pie.class));
+		// Or this:
+		// programmaticAgreeds.filter(EnumRadioGroup.includeAllBut(Pie.APPLE));
 		
 	}
 	
@@ -98,7 +106,8 @@ public class MainActivity extends Activity {
 				
 				// Getting the (possibly translated) label is about the only reason
 				// to ever get the child RadioButtons
-				// If you need to do this, there's a (typed) convenience function:
+				// If you need to do this, findViewByEnum is a (typed) convenience function:
+				// But note the RadioButtons themselves are not generic.
 				RadioButton currentValueRadioButton = group.findViewByEnum(currentValue);
 				
 				String currentValueString = currentValueRadioButton.getText().toString();
@@ -115,23 +124,23 @@ public class MainActivity extends Activity {
 	
 	public void clear(View v) {
 	
-		//Clearing an EnumRadioGroup resets it to the default you
-		//specified at construction. So the Group always has a value
+		// Clearing an EnumRadioGroup resets it to the default you
+		// specified at construction. So the Group always has a value
 		// and that value is always strongly typed.
 		
-		// You can clear it as a RadioGroup, calling the overridden clearCheck,
+		// You can clear it as a RadioGroup, calling the overridden clearCheck:
 		((RadioGroup) findViewById(R.id.agreed1)).clearCheck();
 		
 		// Or you an get it with the type-inferring function, EnumRadioGroup.findById
-		// and clear it using the overridden RadioGroup method.
+		// and clear it using the overridden RadioGroup method:
 		EnumRadioGroup.findById(this, R.id.sex).check(-1);
 		
 		//Preferably, you'd use the type inferring function and clearCheck:
 		EnumRadioGroup.findById(this, R.id.sex).clearCheck();
 		
-		// Or you can set it to any enum constant of its enum type:
+		// Or you can set it to any enum constant of its enum type;
 		// set it with an enum value, and type-safety
-		// means you can't set to the a non-existing value.
+		// means you can't set it to the a non-existing value.
 		programmaticAgreeds.check(Agreed.NO);
 		
 		// And you can get it as a value too:
@@ -145,7 +154,7 @@ public class MainActivity extends Activity {
 		// we can filter a group after its created
 		pieFilterOffset = (pieFilterOffset + 1) % pieFilters.length;
 		EnumRadioGroup.DisplayPredicate<Pie> predicate = pieFilters[pieFilterOffset];
-		((TextView) findViewById(R.id.p_pies_includes)).setText("Predicate " + predicate.toString());
+		((TextView) findViewById(R.id.p_pies_includes)).setText(predicate.toString());
 		programmaticPies.filter(predicate);
 	}
 
