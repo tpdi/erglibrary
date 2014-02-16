@@ -3,12 +3,14 @@ package org.diffenbach.enumradiogroup;
 import java.util.Arrays;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -125,7 +127,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	public void setOnCheckedChangeListener(OnCheckChangedListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
 	}
-
 	
 	@SuppressWarnings("unchecked")
 	protected void init(Context context, String ecn, String dvn, int rbNames, int rbLayout,
@@ -188,6 +189,32 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 			++offset;
 		}
 	}
+	
+
+	// we 'll need to fix the position of any XML children
+	@Override
+	protected void onFinishInflate() {
+		// TODO Auto-generated method stub
+		super.onFinishInflate();
+		if( ! isInEditMode()) {
+			int childCount = getChildCount();
+			for( int xmlChild = enumConstants.length; xmlChild < childCount; ++xmlChild) {
+				View child = getChildAt(xmlChild);
+				if(isDummy(child)) {
+					removeView(child);
+					break;
+				} else {
+					removeView(child);
+					addView(child, xmlChild - enumConstants.length);
+				}
+			}
+		}
+	}
+	
+	private boolean isDummy(View v) {
+		return v instanceof RadioButton && "DUMMY".equals(v.getTag());
+	}
+
 	
 	protected T resIdToEnumConstant(int resId) {
 		// this was a linear search. Ick.

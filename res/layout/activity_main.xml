@@ -22,16 +22,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-
-
         <RadioGroup
             android:id="@+id/zero2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-
-
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,11 +57,9 @@
                     tpdi:enumClassName="org.diffenbach.enumradiogroup.MainActivity$Agreed"
                     tpdi:enumDefaultValueString="NO" />
                 <!-- we neglected to include the names array, so we we see the Enum's toString -->
-                <!--
-				notice the class name: Java standard is that inner classes  are separated 
-				from thier outer class by a dollar sign, not a dot 
-                -->
-
+                <!-- notice the class name: Java standard is that inner classes are --> 
+				<!--  separated from thier outer class by a dollar sign, not a dot -->
+				
                 <TextView
                     android:id="@+id/agreed1_text"
                     android:layout_width="wrap_content"
@@ -79,8 +72,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" 
-                android:background="#64BB9D">
+                android:background="#64BB9D"
+                android:orientation="vertical" >
 
                 <org.diffenbach.enumradiogroup.EnumRadioGroup
                     android:id="@+id/sex"
@@ -91,16 +84,52 @@
                     tpdi:enumDefaultIsShown="false"
                     tpdi:enumDefaultValueString="REQUIRED_FIELD"
                     tpdi:radioButtonLayout="@layout/horizontal_radio_button_wrapped"
-                    tpdi:radioButtonNames="@array/sex" />
-                <!-- we used all our attributes, and we made the default unshown -->
+                    tpdi:radioButtonNames="@array/sex" >
+
+                    <!-- we used all our attributes, and we made the default unshown -->
+
+
+                    <!-- we can put children in the EnumRadioGroup -->
+
+                    <TextView
+                        android:id="@+id/sexlabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/sexlabel" />
+                    
+
+                    
+                    <!-- they will all go before the Enum Radio buttons-->
+                    <!-- unless they're after a dummy RadioButton with no id-->
+                    
+                    <RadioButton 
+                        android:text="I am the dummy, I will be removed" 
+                        android:tag="DUMMY"
+                        android:visibility="gone"
+                        android:height="0dp"
+                        android:width="0dp"/>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="After" />
+                    
+                </org.diffenbach.enumradiogroup.EnumRadioGroup>
 
                 <TextView
                     android:id="@+id/sex_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:text="sex text" />
             </LinearLayout>
         </LinearLayout>
 
