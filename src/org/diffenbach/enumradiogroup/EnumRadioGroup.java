@@ -3,22 +3,18 @@ package org.diffenbach.enumradiogroup;
 import java.util.Arrays;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
-	
-	private enum Sample { IN, EDIT, MODE }
-	
+		
 	public static EnumRadioGroup<?> findById( Activity a, int id) {
 		return (EnumRadioGroup<?>) a.findViewById(id);
 	}
@@ -26,15 +22,19 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	public static EnumRadioGroup<?> findById( View v, int id) {
 		return (EnumRadioGroup<?>) v.findViewById(id);
 	}
+	
+	public static boolean isDummy(View v) {
+		return v instanceof RadioButton && "DUMMY".equals(v.getTag());
+	}
 
 	private static final String CLASS_S_NOT_FOUND = "Class \'%s\' not found ";
 	private static final String EXC_MSG_UNEQUAL_NAMES = "%d names for %d enum constants; must be equal";
 
-	T defaultValue;
+	protected T defaultValue;
 	// While we can get them with defaultValue.getDeclaringClass().getEnumConstants(),
 	// it's a bit of work. Let's be timely.
-	T[] enumConstants;
-	int idOffset;
+	private T[] enumConstants;
+	protected int idOffset;
 	
 	
 	public EnumRadioGroup(Context context, T defaultValue, int rbNames, int rbLayout) {
@@ -96,16 +96,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	public T getCheckedValue() {
 		return resIdToEnumConstant(getCheckedRadioButtonId());
 	}
-
-	public String[] getEnumNames(T[] enumConstants) {
-		String[] ret = new String[enumConstants.length];
-		int offset = 0 ;
-		for( T ec : enumConstants) {
-			ret[offset] = ec.toString();
-			++offset;
-		}
-		return ret;
-	}
 	
 	public int getViewIdForEnum(T enumConstant) {
 		return enumConstant.ordinal() + idOffset;
@@ -126,6 +116,16 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 
 	public void setOnCheckedChangeListener(OnCheckChangedListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
+	}
+	
+	protected String[] getEnumNames(T[] enumConstants) {
+		String[] ret = new String[enumConstants.length];
+		int offset = 0 ;
+		for( T ec : enumConstants) {
+			ret[offset] = ec.toString();
+			++offset;
+		}
+		return ret;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -151,7 +151,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 		if (rbLayout == -1) {
 			rbLayout = getOrientation() == LinearLayout.VERTICAL 
-					? R.layout.vertical_radio_button : R.layout.horizontal_radio_button;
+					? R.layout.horizontal_wrapped_radio_button : R.layout.horizontal_radio_button;
 		}
 		
 		String[] names = rbNames != -1 ? context.getResources().getStringArray(rbNames)
@@ -194,8 +194,8 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// we 'll need to fix the position of any XML children
 	@Override
 	protected void onFinishInflate() {
-		// TODO Auto-generated method stub
 		super.onFinishInflate();
+		
 		if( ! isInEditMode()) {
 			int childCount = getChildCount();
 			boolean foundDummy = false;
@@ -206,18 +206,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 					--xmlChild;
 					--childCount;
 					foundDummy = true;
-				} else if( !foundDummy){
+				} else if(!foundDummy) {
 					removeView(child);
 					addView(child, xmlChild - enumConstants.length);
 				}
 			}
 		}
 	}
-	
-	private boolean isDummy(View v) {
-		return v instanceof RadioButton && "DUMMY".equals(v.getTag());
-	}
-
 	
 	protected T resIdToEnumConstant(int resId) {
 		// this was a linear search. Ick.
@@ -231,8 +226,22 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 
 	
+	/** helper classes 
+	 * 
+	 * @author tpd
+	 * 
+	 */
 	
-	public static abstract class OnCheckChangedListener<T extends Enum<T>> implements RadioGroup.OnCheckedChangeListener {
+	// We give this the "EGR" prefixed name so anyone using it won't
+	// have to disambiguate from  RadioGroup.OnCheckedChangeListener...
+	public interface ERGOnCheckChangedListener<T extends Enum<T>> extends RadioGroup.OnCheckedChangeListener {
+		 void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
+	}
+	
+	
+	// ...but mostly to save the un-prefixed name because most users will want to use this one.
+	public static abstract class OnCheckChangedListener<T extends Enum<T>> 
+		implements ERGOnCheckChangedListener<T> {
 
 		@SuppressWarnings("unchecked")
 		@Override
@@ -251,7 +260,8 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		boolean display(T enumConstant);
 	}
 	
-	//Alas, this works, but not with the hack for making arrays...
+	// Alas, this works, but not with the hack for making arrays...
+	// no, this is better, as it's more strongly typed
 	@SuppressWarnings("rawtypes")
 	private static final DisplayPredicate INCLUDE_ALL = new DisplayPredicate() {
 
@@ -268,6 +278,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	};
 	
 	
+	// That notused class is just for type inference
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAll(Class<T> notused) {
 		return INCLUDE_ALL;
@@ -280,16 +291,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(T... exclude) {
 		return new IncludeAllBut<T>(Arrays.asList(exclude));
 	}
-	
-	/*
-	private static class IncludeAll<T extends Enum<T>> implements DisplayPredicate<T> {
 		
-		@Override
-		public boolean display( T enumConstant) {
-			return true;
-		}
-	}*/
-	
 	private static class IncludeAllBut<T extends Enum<T>> implements DisplayPredicate<T> {
 		private List<T> exclude;
 		

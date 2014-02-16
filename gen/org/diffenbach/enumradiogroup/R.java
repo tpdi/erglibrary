@@ -11,6 +11,7 @@ public final class R {
     public static final class array {
         public static final int agreed=0x7f060000;
         public static final int agreed_without_no=0x7f060001;
+        public static final int pet=0x7f060004;
         public static final int pie=0x7f060002;
         public static final int sex=0x7f060003;
     }
@@ -63,25 +64,27 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000d;
-        public static final int agreed1=0x7f090003;
-        public static final int agreed1_text=0x7f090004;
-        public static final int main=0x7f090000;
-        public static final int p_agreed_text=0x7f090009;
-        public static final int p_agreed_wrapper=0x7f090008;
-        public static final int p_pies_includes=0x7f09000b;
-        public static final int p_pies_text=0x7f09000c;
-        public static final int p_pies_wrapper=0x7f09000a;
-        public static final int sex=0x7f090005;
-        public static final int sex_text=0x7f090007;
-        public static final int sexlabel=0x7f090006;
-        public static final int zero1=0x7f090001;
-        public static final int zero2=0x7f090002;
+        public static final int action_settings=0x7f09000f;
+        public static final int agreed1=0x7f090004;
+        public static final int agreed1_text=0x7f090005;
+        public static final int main=0x7f090001;
+        public static final int p_agreed_text=0x7f09000a;
+        public static final int p_agreed_wrapper=0x7f090009;
+        public static final int p_pies_includes=0x7f09000c;
+        public static final int p_pies_text=0x7f09000d;
+        public static final int p_pies_wrapper=0x7f09000b;
+        public static final int pets=0x7f09000e;
+        public static final int scrollview=0x7f090000;
+        public static final int sex=0x7f090006;
+        public static final int sex_text=0x7f090008;
+        public static final int sexlabel=0x7f090007;
+        public static final int zero1=0x7f090002;
+        public static final int zero2=0x7f090003;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int horizontal_radio_button=0x7f030001;
-        public static final int horizontal_radio_button_wrapped=0x7f030002;
+        public static final int horizontal_wrapped_radio_button=0x7f030002;
         public static final int reuse=0x7f030003;
         public static final int vertical_radio_button=0x7f030004;
     }

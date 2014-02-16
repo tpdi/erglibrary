@@ -14,15 +14,17 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
-	enum Agreed {YES, NO, MAYBE}
+	enum Agreed {NO, YES, MAYBE}
 	enum Pie {APPLE, CHERRY, POTATO}
 	enum Sex {REQUIRED_FIELD, FEMALE, MALE}
+	enum Pet {NONE, CAT, DOG, BOTH} 
 	
 	EnumRadioGroup<Agreed> programmaticAgreeds;
 	EnumRadioGroup<Pie> programmaticPies;
+	EnumRadioGroup<Pet> pets;
 	
 	DisplayPredicate<Pie>[] pieFilters;
-	int pieFilterOffset = 0;
+	int pieFilterOffset = 1;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -51,16 +53,24 @@ public class MainActivity extends Activity {
 						 this,							// context
 						 Pie.POTATO,                    // the default button we clear to
 						 R.array.pie, 					// a list of localized names for the buttons
-						 R.layout.horizontal_radio_button_wrapped) // the button layout
+						 R.layout.horizontal_wrapped_radio_button) // the button layout
 						 
 						 // Since filter returns this, we can (essentially) filter at creation,
 						 // before we assign to a variable.
-					.filter(EnumRadioGroup.includeAllBut(Pie.POTATO))	 
+					.filter(EnumRadioGroup.includeAllBut(Pie.APPLE))	 
 				); 
 		
 		
 		// and then set the EnumRadioGroup's orientation match the layout.
 		programmaticPies.setOrientation(LinearLayout.HORIZONTAL);
+		
+		
+		// all the comments make it look too complicated, so let me show it again:
+		
+		pets = new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, R.layout.horizontal_wrapped_radio_button);
+		pets.setOrientation(LinearLayout.HORIZONTAL);
+		addViewToWrapper(R.id.pets, pets);
+		
 		
 		// See the setUpRadioGroupCallback for setting up callbacks.
 		// EnumRadioGroup.findById is a somewhat typesafe way to get an EnumRadioGroup.
@@ -85,8 +95,8 @@ public class MainActivity extends Activity {
 		// Or this:
 		// programmaticAgreeds.filter(EnumRadioGroup.includeAllBut(Pie.APPLE));
 		
-		TextView pieLabel = new TextView(this);
-		pieLabel.setText(R.string.pielabel);
+		TextView pieLabel = new TextView(this); // notice it has no padding, unlike the XML Views
+		pieLabel.setText(R.string.pielabel); 
 		programmaticPies.addView(pieLabel, 0);
 		
 	}
@@ -146,6 +156,8 @@ public class MainActivity extends Activity {
 		// for efficiency, we should put Pie.values() in a local, but...
 		Pie next = Pie.values()[ (selected.ordinal() + 1) % Pie.values().length];
 		programmaticPies.check(next);
+		
+		pets.clearCheck();
 	}
 	
 	// Button callback
