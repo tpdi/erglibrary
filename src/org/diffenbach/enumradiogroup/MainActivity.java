@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
 		
 		
-		// we can make, keep and reuse references to typed filters 
+		// we can make, keep, and reuse references to typed filters 
 		// that take the Enum class or Enum constants
 		pieFilters = EnumRadioGroup.makeDisplayPredicateArray(
 				EnumRadioGroup.includeAll(Pie.class),
@@ -85,11 +85,10 @@ public class MainActivity extends Activity {
 		// Or this:
 		// programmaticAgreeds.filter(EnumRadioGroup.includeAllBut(Pie.APPLE));
 		
-	}
-	
-	private void addViewToWrapper( int parentId, View child) {
-		ViewGroup parent = (ViewGroup) findViewById(parentId);
-		parent.addView(child, 0);
+		TextView pieLabel = new TextView(this);
+		pieLabel.setText(R.string.pielabel);
+		programmaticPies.addView(pieLabel, 0);
+		
 	}
 	
 	// This is a generic method, so it properly handles EnumRadioGroups 
@@ -119,9 +118,8 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
-
 	
+	// Button callback
 	public void clear(View v) {
 	
 		// Clearing an EnumRadioGroup resets it to the default you
@@ -150,6 +148,7 @@ public class MainActivity extends Activity {
 		programmaticPies.check(next);
 	}
 	
+	// Button callback
 	public void changeFilter(View v) {
 		// we can filter a group after its created
 		pieFilterOffset = (pieFilterOffset + 1) % pieFilters.length;
@@ -157,5 +156,12 @@ public class MainActivity extends Activity {
 		((TextView) findViewById(R.id.p_pies_includes)).setText(predicate.toString());
 		programmaticPies.filter(predicate);
 	}
+
+	// just a convenience function, to insert a programmatic EnumRadioGroup
+	private void addViewToWrapper( int parentId, View child) {
+		ViewGroup parent = (ViewGroup) findViewById(parentId);
+		parent.addView(child, 0);
+	}
+	
 
 }

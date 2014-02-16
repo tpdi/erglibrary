@@ -4,6 +4,8 @@
     <string name="app_name">EnumRadioGroup Demo</string> 
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="pielabel">Pick Pie:</string>
+    <string name="sexlabel">Sex:</string>
     <string-array name="agreed">
         <item >Yes</item>
         <item >No</item>
