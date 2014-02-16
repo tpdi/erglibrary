@@ -59,10 +59,11 @@ public class MainActivity extends Activity {
 				); 
 		
 		
-		// and then set the EnumRadioGroup's orientation match the layout
+		// and then set the EnumRadioGroup's orientation match the layout.
 		programmaticPies.setOrientation(LinearLayout.HORIZONTAL);
 		
-		// see the setUpRadioGroupCallback for demo code
+		// See the setUpRadioGroupCallback for setting up callbacks.
+		// EnumRadioGroup.findById is a typesafe way to get an EnumRadioGroup.
 		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.agreed1), R.id.agreed1_text);
 		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
@@ -90,7 +91,7 @@ public class MainActivity extends Activity {
 		erg.setOnCheckedChangeListener( new OnCheckChangedListener<T>() {
 
 			@Override
-			public void onCheckedChanged(EnumRadioGroup<T> group, T currentValue) {
+			public void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId) {
 				
 				// we're given the current value, for most things that's all we'll need
 				String currentValueName = currentValue.toString() ;
@@ -103,8 +104,9 @@ public class MainActivity extends Activity {
 				String currentValueString = currentValueRadioButton.getText().toString();
 				
 				((TextView) MainActivity.this.findViewById(textViewid))
-					.setText(String.format("%s (%s) (%sthe default value) ", 
-							currentValueName, currentValueString, group.isSetToDefault() ? "" : "not ")); 
+					.setText(String.format("%s (%s) (%sdefault) id: %d", 
+							currentValueName, currentValueString, 
+							group.isSetToDefault() ? "" : "not ", checkedId)); 
 			}
 		});
 	}
