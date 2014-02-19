@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
@@ -272,6 +273,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	protected void init(Context context, String ecn, String dvn, int rbNames, int rbLayout,
 			boolean filterFirst) {
 		try {
+			Log.i(getClass().getName(), String.format("Enum Class %s,  Enum Value: %s", ecn, dvn));
 			Class<T> ec = (Class<T>) Class.forName(ecn);
 			init(context, Enum.valueOf( ec, dvn), rbNames, rbLayout);
 			if(filterFirst) {

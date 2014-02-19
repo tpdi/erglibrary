@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Diffenbch Widget Library</string>  
-    <string name="dmmy">Diffenbch Widget Library</string>  
+    <string name="dummy">Diffenbch Widget Library</string>  
 </resources>

@@ -8,11 +8,6 @@
 package org.diffenbach.android.widgets;
 
 public final class R {
-    public static final class array {
-        public static int agreed=0x7f060000;
-        public static int agreed_without_no=0x7f060001;
-        public static int pie=0x7f060002;
-    }
     public static final class attr {
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
@@ -61,22 +56,14 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static int border=0x7f020000;
         public static int ic_launcher=0x7f020001;
     }
-    public static final class id {
-        public static int action_settings=0x7f090000;
-    }
     public static final class layout {
         public static int horizontal_radio_button=0x7f030000;
         public static int vertical_radio_button=0x7f030001;
         public static int wrapped_radio_button=0x7f030002;
     }
-    public static final class menu {
-        public static int main=0x7f080000;
-    }
     public static final class string {
-        public static int action_settings=0x7f050002;
         public static int app_name=0x7f050000;
-        public static int dmmy=0x7f050001;
-        public static int hello_world=0x7f050003;
+        public static int dummy=0x7f050001;
     }
     public static final class style {
         /** 
@@ -100,11 +87,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     
  API 14 theme customizations can go here. 
          */
-        public static int AppBaseTheme=0x7f070000;
+        public static int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static int AppTheme=0x7f070001;
+        public static int AppTheme=0x7f060001;
     }
     public static final class styleable {
         /** Attributes that can be used with a EnumRadioGroup.
