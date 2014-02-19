@@ -1,8 +1,10 @@
 package org.diffenbach.enumradiogroup;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+
+import org.diffenbach.android.utils.ViewIdGenerator;
+import org.diffenbach.android.utils.AtomicIntViewIdGenerator;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,26 +16,37 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+
+/**
+ * A class to show Enum constants as radio buttons.
+ * @author TP Diffenbach
+ *
+ * @param <T> An Enum class (<T extends Enum<T>>)
+ */
+
 public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 	/** 
 	 * Wraps findById in a cast
 	 * @param a an Activity
 	 * @param id an id of an EnumRadioGroup
-	 * @return a View that we hope is an EnumRadioGroup, or ClasscastException
+	 * @return a View that we hope is an EnumRadioGroup, or throw a ClassCastException
 	 */
-	public static EnumRadioGroup<?> findById( Activity a, int id) {
-		return (EnumRadioGroup<?>) a.findViewById(id);
+	
+	@SuppressWarnings("unchecked")
+	public static <E extends Enum<E>> EnumRadioGroup<E> findById( Activity a, int id) {
+		return (EnumRadioGroup<E>) a.findViewById(id);
 	}
 	
 	/** 
 	 * Wraps findById in a cast
 	 * @param v a View
 	 * @param id an id of an EnumRadioGroup
-	 * @return a child View that we hope is an EnumRadioGroup, or ClasscastException
+	 * @return a child View that we hope is an EnumRadioGroup, or throw ClassCastException
 	 */
-	public static EnumRadioGroup<?> findById( View v, int id) {
-		return (EnumRadioGroup<?>) v.findViewById(id);
+	@SuppressWarnings("unchecked")
+	public static <E extends Enum<E>> EnumRadioGroup<E> findById( View v, int id) {
+		return (EnumRadioGroup<E>) v.findViewById(id);
 	}
 	
 	/**
@@ -55,7 +68,9 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// While we can get them with defaultValue.getDeclaringClass().getEnumConstants(),
 	// it's a bit of work. Let's be timely.
 	private T[] enumConstants;
-	protected int idOffset;
+	// the id of the RadioButton with ordinal() == 0
+	// all other RadioButton ids are consecutive increasing
+	protected int idOffset;  
 	
 	
 	/**
@@ -81,6 +96,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
+	 * You really shoulb't use the Enum's nams as display values.
 	 * Ctor that uses a default layout and the Enums' toString()s as labels.
 	 * @param context
 	 * @param defaultValue
@@ -112,7 +128,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
-	 * Return the default value set in the ctor.
+	 * Return the default enum constant for this Radio Group, as set in the ctor.
 	 * @return
 	 */
 	public T getDefault() {
@@ -127,9 +143,8 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return getCheckedValue() == defaultValue;
 	}
 	
-
 	/**
-	 * Sets the check to the default value.
+	 * Resets the checked RadioButton to be the default value.
 	 */
 	@Override
 	public void clearCheck() {
@@ -137,6 +152,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
+	 * Please prefer using check(T value).
 	 * Sets the checked button to be the RadioButton with the  given id, 
 	 * IF that button is a member of the group; if not, throws IllegalArgumentException
 	 * If the id is -1, checks the RadioButton corresponding to the default passed in the ctor. 
@@ -144,11 +160,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 */
 	@Override
 	public void check(int id) {
-		if(id == -1) clearCheck();
-		else if(id < idOffset || id >= idOffset + getEnumConstants().length) {
+		if(id == -1) {
+			clearCheck();
+		} else if(isChildRadioButtonIdValid(id)) {
+			super.check(id);
+		} else {
 			throw new IllegalArgumentException("Argument to \'check\' must be in range -1 to count of enum's constants -1");
 		}
-		else super.check(id);
 	}
 	
 	/**
@@ -160,8 +178,10 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
-	 * Gets the enum value corresponding to the currently check RadioButton.
-	 * @return the enum value of the currently checked button
+	 * Gets the enum value corresponding to the currently checked RadioButton.
+	 * @return the enum constant corresponding to the currently checked button.
+	 * Note that if you override this to provide non-contiguous ids, 
+	 * you'll also need to override isChildRadioButtonIdValid
 	 */
 	public T getCheckedValue() {
 		return resIdToEnumConstant(getCheckedRadioButtonId());
@@ -177,7 +197,17 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
-	 * Displays only buttons that pass the filter
+	 * return the RadioButton  corresponding to the passed-in enum constant.
+	 * @param enumConstant
+	 * @return
+	 */
+	// Convenience function
+	public RadioButton findViewByEnum(T enumConstant) {
+		return (RadioButton) findViewById(getViewIdForEnum(enumConstant));
+	}
+
+	/**
+	 * Displays only buttons  corresponding to enum constants that pass the filter
 	 * @param pred a {@DisplayPredicate} for the Enum<T>s
 	 * @return this, for chaining
 	 */
@@ -189,24 +219,37 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return this;
 	}
 	
+	/**
+	 * Display only buttons corresponding to enums in the given EnumSet.
+	 * @param set am EnumSet<T>
+	 * @return this, for chaining
+	 */
 	public EnumRadioGroup<T> filter( EnumSet<T> set) {
-		for( T ec : getEnumConstants()) {
-			findViewByEnum(ec).setVisibility(set.contains(ec)? View.VISIBLE : View.GONE);
-		}
-		
-		return this;
+		return filter(include(set));
 	}
 	
-	
-	// Convenience function
-	public RadioButton findViewByEnum(T enumConstant) {
-		return (RadioButton) findViewById(getViewIdForEnum(enumConstant));
+	/**
+	 * Display only buttons  corresponding to enums not in the given EnumSet.
+	 * @param set am EnumSet<T>
+	 * @return this, for chaining
+	 */
+	public EnumRadioGroup<T> filterNotIn( EnumSet<T> set) {
+		return filter(includeAllBut(set));
 	}
-
+	
+	/**
+	 * Set the (generic parameterized) Change Listener.
+	 * @param listener
+	 */
 	public void setOnCheckedChangeListener(OnCheckChangedListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
 	}
 	
+	/**
+	 * Convenience function to produce a Enum's names if the caller doesn't pass us a list of names.
+	 * @param enumConstants
+	 * @return an array of [toString called on each enum constant]
+	 */
 	protected String[] getEnumNames(T[] enumConstants) {
 		String[] ret = new String[enumConstants.length];
 		int offset = 0 ;
@@ -217,6 +260,15 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return ret;
 	}
 	
+	/**
+	 * The init called form the XML
+	 * @param context
+	 * @param ecn name of enum class
+	 * @param dvn name of default enum value
+	 * @param rbNames resource id of human-readable names of enums, or -1
+	 * @param rbLayout resource id of layout for radio buttons, or -1
+	 * @param filterFirst true if the first enum (ordinal() == 0) should be filtered out
+	 */
 	@SuppressWarnings("unchecked")
 	protected void init(Context context, String ecn, String dvn, int rbNames, int rbLayout,
 			boolean filterFirst) {
@@ -232,6 +284,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		}
 	}
 	
+	/**
+	 * The init called from the all ctors. For each enum conctant, make a RadioButton.
+	 * @param context
+	 * @param defaultValue the default enum value
+	 * @param rbNames resource id of human-readable names of enums, or -1
+	 * @param rbLayout resource id of human-readable names of enums, or -1
+	 */
 	protected void init(Context context, T defaultValue, int rbNames, int rbLayout ) {
 		
 		this.defaultValue = defaultValue;
@@ -279,8 +338,12 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		}
 	}
 	
-
-	// we 'll need to fix the position of any XML children
+	/**
+	 * we need to fix the position of any XML children
+	 * we move any XML children to precede before our buttons
+	 * until we see a dummy
+	 * and we remove all dummies
+	 */
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
@@ -303,6 +366,16 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		}
 	}
 	
+	
+	/**
+	 *  The methods resIdToEnumConstant, isChildRadioButtonIdValid and getViewIdForEnum(enumConstant)
+	 *  establish the bi-directional enum constant <-> radiobutton mapping.
+	 * They require that radiobutton ids be contiguous.
+	 * If you change one, change all.
+	 * 
+	 * @param resId a child radioButton id
+	 * @return the corresponding enum constant
+	 */
 	protected T resIdToEnumConstant(int resId) {
 		// this was a linear search. Ick.
 		// then it was a binary search. Fortunately we have monotonic-increasing ids.
@@ -310,7 +383,21 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return enumConstants[resId - idOffset];
 	}
 	
-	private T[] getEnumConstants() {
+	/**
+	 * Check if an id is of a child radiobutton corresponding to an enum constant.
+	 * See documentation for resIdToEnumConstant
+	 * @param id the id
+	 * @return true if it corresponds to a enum constant radiobutton
+	 */
+	protected boolean isChildRadioButtonIdValid(int id) {
+		return id >= idOffset && id < idOffset + getEnumConstants().length;
+	}
+	
+	/**
+	 * Return the enum constants that this EnumRadioGroup displays.
+	 * @return
+	 */
+	protected T[] getEnumConstants() {
 		return enumConstants;
 	}
 
@@ -344,7 +431,12 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		
 	}
 	
-	
+	/**
+	 * Predicate for setting the display
+	 * @author TP Diffenbach
+	 *
+	 * @param <T>
+	 */
 	public interface DisplayPredicate <T extends Enum<T>> {
 		boolean apply(T enumConstant);
 	}
@@ -366,7 +458,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 
 	};
 	
-	
+	/**
+	 * Factory functions to create and return filter predicates.
+	 * @param notused
+	 * @return
+	 */
 	// That notused class is just for type inference
 	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAll(Class<T> notused) {
@@ -381,8 +477,12 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return new ExcludeEnumSetPredicate<T>(EnumSet.of(first, exclude));
 	}
 	
-	public static <T extends Enum<T>> DisplayPredicate<T> includeAll(EnumSet<T> eset) {
+	public static <T extends Enum<T>> DisplayPredicate<T> include(EnumSet<T> eset) {
 		return new ExcludeEnumSetPredicate<T>(EnumSet.complementOf(eset));
+	}
+	
+	public static <T extends Enum<T>> DisplayPredicate<T> include(T first, T... rest) {
+		return new ExcludeEnumSetPredicate<T>(EnumSet.complementOf(EnumSet.of(first, rest)));
 	}
 	
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(EnumSet<T> eset) {
@@ -425,7 +525,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		};
 	}
 	
-	
+	/**
+	 * Function to allow the creation of arrays of predicates.
+	 * @param dps
+	 * @return
+	 */
 	// Hello! I am a hack to allow the creation of generic array which are otherwise disallowed.
 	public static <T extends Enum<T>> DisplayPredicate<T>[] makeDisplayPredicateArray( DisplayPredicate<T>... dps) {
 		return dps;
