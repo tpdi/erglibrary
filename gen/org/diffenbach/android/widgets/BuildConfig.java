@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package org.diffenbach.enumradiogroup;
+package org.diffenbach.android.widgets;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;

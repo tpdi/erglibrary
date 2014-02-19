@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.diffenbach.android.utils.AtomicIntViewIdGenerator;
 import org.diffenbach.android.utils.ViewIdGenerator;
-import org.diffenbach.enumradiogroup.R;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
