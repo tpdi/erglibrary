@@ -299,8 +299,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		this.idOffset = viewIdGenerator.generateViewIds(enumConstants.length);
 		
 		if (rbLayout == -1) {
-			rbLayout = getOrientation() == LinearLayout.VERTICAL 
-					? R.layout.horizontal_wrapped_radio_button : R.layout.horizontal_radio_button;
+			rbLayout = R.layout.wrapped_radio_button ;
 		}
 		
 		String[] names = rbNames != -1 ? context.getResources().getStringArray(rbNames)

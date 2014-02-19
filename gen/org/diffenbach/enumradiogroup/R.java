@@ -9,11 +9,9 @@ package org.diffenbach.enumradiogroup;
 
 public final class R {
     public static final class array {
-        public static final int agreed=0x7f060000;
-        public static final int agreed_without_no=0x7f060001;
-        public static final int pet=0x7f060004;
-        public static final int pie=0x7f060002;
-        public static final int sex=0x7f060003;
+        public static int agreed=0x7f060000;
+        public static int agreed_without_no=0x7f060001;
+        public static int pie=0x7f060002;
     }
     public static final class attr {
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
@@ -23,7 +21,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int enumClassName=0x7f010000;
+        public static int enumClassName=0x7f010000;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -31,7 +29,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int enumDefaultIsShown=0x7f010002;
+        public static int enumDefaultIsShown=0x7f010002;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -39,15 +37,15 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int enumDefaultValueString=0x7f010001;
+        public static int enumDefaultValueString=0x7f010001;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int radioButtonLayout=0x7f010003;
+        public static int radioButtonLayout=0x7f010003;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int radioButtonNames=0x7f010004;
+        public static int radioButtonNames=0x7f010004;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -56,47 +54,29 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static int activity_horizontal_margin=0x7f040000;
+        public static int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int border=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static int border=0x7f020000;
+        public static int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000f;
-        public static final int agreed1=0x7f090004;
-        public static final int agreed1_text=0x7f090005;
-        public static final int main=0x7f090001;
-        public static final int p_agreed_text=0x7f09000a;
-        public static final int p_agreed_wrapper=0x7f090009;
-        public static final int p_pies_includes=0x7f09000c;
-        public static final int p_pies_text=0x7f09000d;
-        public static final int p_pies_wrapper=0x7f09000b;
-        public static final int pets=0x7f09000e;
-        public static final int scrollview=0x7f090000;
-        public static final int sex=0x7f090006;
-        public static final int sex_text=0x7f090008;
-        public static final int sexlabel=0x7f090007;
-        public static final int zero1=0x7f090002;
-        public static final int zero2=0x7f090003;
+        public static int action_settings=0x7f090000;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int horizontal_radio_button=0x7f030001;
-        public static final int horizontal_wrapped_radio_button=0x7f030002;
-        public static final int reuse=0x7f030003;
-        public static final int vertical_radio_button=0x7f030004;
+        public static int horizontal_radio_button=0x7f030000;
+        public static int vertical_radio_button=0x7f030001;
+        public static int wrapped_radio_button=0x7f030002;
     }
     public static final class menu {
-        public static final int main=0x7f080000;
+        public static int main=0x7f080000;
     }
     public static final class string {
-        public static final int action_settings=0x7f050001;
-        public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050002;
-        public static final int pielabel=0x7f050003;
-        public static final int sexlabel=0x7f050004;
+        public static int action_settings=0x7f050002;
+        public static int app_name=0x7f050000;
+        public static int dmmy=0x7f050001;
+        public static int hello_world=0x7f050003;
     }
     public static final class style {
         /** 
@@ -120,11 +100,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070000;
+        public static int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070001;
+        public static int AppTheme=0x7f070001;
     }
     public static final class styleable {
         /** Attributes that can be used with a EnumRadioGroup.
