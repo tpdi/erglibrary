@@ -55,7 +55,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @return true if the View is an XML dummy which we will remove.
 	 */
 	public static boolean isDummy(View v) {
-		return v instanceof RadioButton && "DUMMY".equals(v.getTag());
+		return v instanceof RadioButton;
 	}
 
 	private static final String CLASS_S_NOT_FOUND = "Class \'%s\' not found ";
@@ -71,7 +71,8 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// the id of the RadioButton with ordinal() == 0
 	// all other RadioButton ids are consecutive increasing
 	protected int idOffset;  
-	
+	// so we can chain listeners, we need to keep a copy of the  listener;
+	protected OnCheckChangedListener<T> onCheckChangedListener;
 	
 	/**
 	 * Ctor that takes:
@@ -205,6 +206,10 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	public RadioButton findViewByEnum(T enumConstant) {
 		return (RadioButton) findViewById(getViewIdForEnum(enumConstant));
 	}
+	
+	public T[] values() {
+		return getEnumConstants().clone();
+	}
 
 	/**
 	 * Displays only buttons  corresponding to enum constants that pass the filter
@@ -239,10 +244,26 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	
 	/**
 	 * Set the (generic parameterized) Change Listener.
+	 * Chains to any existing listener
 	 * @param listener
 	 */
 	public void setOnCheckedChangeListener(OnCheckChangedListener<T> listener) {
-		super.setOnCheckedChangeListener(listener);
+		setOnCheckedChangeListener(false, listener);
+		
+	}
+	
+	/**
+	 * Set the (generic parameterized) Change Listener.
+	 * @param listener
+	 */
+	public void setOnCheckedChangeListener(boolean chain, OnCheckChangedListener<T> listener) {
+		if( ! chain || this.onCheckChangedListener == null) {
+			this.onCheckChangedListener = listener;
+			super.setOnCheckedChangeListener(listener);
+		} else {
+			this.onCheckChangedListener.chain(listener);
+		}
+		
 	}
 	
 	/**
@@ -412,20 +433,30 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// have to disambiguate from  RadioGroup.OnCheckedChangeListener...
 	public interface ERGOnCheckChangedListener<T extends Enum<T>> extends RadioGroup.OnCheckedChangeListener {
 		 void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
+		 void chain(ERGOnCheckChangedListener<T> next);
 	}
 	
 	
 	// ...but mostly to save the un-prefixed name because most users will want to use this one.
 	public static abstract class OnCheckChangedListener<T extends Enum<T>> 
 		implements ERGOnCheckChangedListener<T> {
+		
+		public ERGOnCheckChangedListener<T> next;
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			EnumRadioGroup<T> erg = (EnumRadioGroup<T>) group;
-			onCheckedChanged(erg, erg.getCheckedValue(), checkedId);
+			T currentValue = erg.getCheckedValue();
+			onCheckedChanged(erg, currentValue, checkedId);
+			if(next != null ) next.onCheckedChanged(erg, currentValue, checkedId);
 			
 		}
+		
+		@Override
+		public void chain(EnumRadioGroup.ERGOnCheckChangedListener<T> next) {
+			this.next = next;
+		};
 		
 		public abstract void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
 		
