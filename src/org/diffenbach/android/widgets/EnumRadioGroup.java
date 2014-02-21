@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.diffenbach.android.utils.AtomicIntViewIdGenerator;
 import org.diffenbach.android.utils.ViewIdGenerator;
+import org.diffenbach.android.widgets.OnCheckedChangeListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -72,7 +73,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// all other RadioButton ids are consecutive increasing
 	protected int idOffset;  
 	// so we can chain listeners, we need to keep a copy of the  listener;
-	protected OnCheckChangedListener<T> onCheckChangedListener;
 	
 	/**
 	 * Ctor that takes:
@@ -247,22 +247,8 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Chains to any existing listener
 	 * @param listener
 	 */
-	public void setOnCheckedChangeListener(OnCheckChangedListener<T> listener) {
-		setOnCheckedChangeListener(false, listener);
-		
-	}
-	
-	/**
-	 * Set the (generic parameterized) Change Listener.
-	 * @param listener
-	 */
-	public void setOnCheckedChangeListener(boolean chain, OnCheckChangedListener<T> listener) {
-		if( ! chain || this.onCheckChangedListener == null) {
-			this.onCheckChangedListener = listener;
-			super.setOnCheckedChangeListener(listener);
-		} else {
-			this.onCheckChangedListener.chain(listener);
-		}
+	public void setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
+		super.setOnCheckedChangeListener(listener);
 		
 	}
 	
@@ -429,38 +415,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * 
 	 */
 	
-	// We give this the "EGR" prefixed name so anyone using it won't
-	// have to disambiguate from  RadioGroup.OnCheckedChangeListener...
-	public interface ERGOnCheckChangedListener<T extends Enum<T>> extends RadioGroup.OnCheckedChangeListener {
-		 void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
-		 void chain(ERGOnCheckChangedListener<T> next);
-	}
-	
-	
-	// ...but mostly to save the un-prefixed name because most users will want to use this one.
-	public static abstract class OnCheckChangedListener<T extends Enum<T>> 
-		implements ERGOnCheckChangedListener<T> {
-		
-		public ERGOnCheckChangedListener<T> next;
 
-		@SuppressWarnings("unchecked")
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			EnumRadioGroup<T> erg = (EnumRadioGroup<T>) group;
-			T currentValue = erg.getCheckedValue();
-			onCheckedChanged(erg, currentValue, checkedId);
-			if(next != null ) next.onCheckedChanged(erg, currentValue, checkedId);
-			
-		}
-		
-		@Override
-		public void chain(EnumRadioGroup.ERGOnCheckChangedListener<T> next) {
-			this.next = next;
-		};
-		
-		public abstract void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
-		
-	}
+	/* OnCheckedChangeListener<T extends Enum<T>> is in its own file. 
+	 * 
+	 */
+
 	
 	/**
 	 * Predicate for setting the display
@@ -475,7 +434,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// Alas, this works, but not with the hack for making arrays...
 	// no, this is better, as it's more strongly typed
 	@SuppressWarnings("rawtypes")
-	private static final DisplayPredicate INCLUDE_ALL = new DisplayPredicate() {
+	public static final DisplayPredicate INCLUDE_ALL = new DisplayPredicate() {
 
 		@Override
 		public boolean apply(Enum enumConstant) {
@@ -538,10 +497,10 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		};
 	}*/
 	
-	private static class ExcludeEnumSetPredicate<T extends Enum<T>> implements DisplayPredicate<T> {
+	public static class ExcludeEnumSetPredicate<T extends Enum<T>> implements DisplayPredicate<T> {
 		private EnumSet<T> exclude;
 		
-		private ExcludeEnumSetPredicate(EnumSet<T> eset) {
+		public ExcludeEnumSetPredicate(EnumSet<T> eset) {
 			this.exclude = eset;
 		}
 
