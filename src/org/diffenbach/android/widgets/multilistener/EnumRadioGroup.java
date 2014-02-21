@@ -1,14 +1,11 @@
 package org.diffenbach.android.widgets.multilistener;
 
-import java.util.EnumSet;
-import java.util.List;
+import org.diffenbach.android.widgets.EnumRadioGroupABC;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
-
 /**
  * A class to show Enum constants as radio buttons.
  * @author TP Diffenbach
@@ -16,7 +13,8 @@ import android.view.View;
  * @param <T> An Enum class (<T extends Enum<T>>)
  */
 
-public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.widgets.EnumRadioGroup<T> {
+@SuppressWarnings("unused")
+public class EnumRadioGroup<T extends Enum<T>> extends EnumRadioGroupABC<T, EnumRadioGroup<T>> {
 		
 	/** 
 	 * Wraps findById in a cast
@@ -84,20 +82,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 				? listener : this.onCheckChangedListener.toMulti(listener));
 	}
 	
-	@Override
-	public EnumRadioGroup<T> filter(org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate<T> pred) {
-		return (EnumRadioGroup<T>) super.filter(pred);
-	};
-	
-	@Override
-	public EnumRadioGroup<T> filter(java.util.EnumSet<T> set) {
-		return (EnumRadioGroup<T>) super.filter(set);
-	}
-	
-	@Override
-	public EnumRadioGroup<T> filterNotIn(java.util.EnumSet<T> set) {
-		return (EnumRadioGroup<T>) super.filterNotIn(set);
-	};
+
 	
 		
 	/** helper classes 
@@ -114,37 +99,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 	 * @param <T>
 	 */
 		
-	/**
-	 * Factory functions to create and return filter predicates.
-	 * @param notused
-	 * @return
-	 */
-	// That notused class is just for type inference
-	@SuppressWarnings("unchecked")
-	public static <T extends Enum<T>> DisplayPredicate<T> includeAll(Class<T> notused) {
-		return org.diffenbach.android.widgets.EnumRadioGroup.INCLUDE_ALL;
-	}
-	
-	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(List<T> exclude) {
-		return new ExcludeEnumSetPredicate<T>(EnumSet.copyOf(exclude));
-	}
-	
-	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(T first, T... exclude) {
-		return new ExcludeEnumSetPredicate<T>(EnumSet.of(first, exclude));
-	}
-	
-	public static <T extends Enum<T>> DisplayPredicate<T> include(EnumSet<T> eset) {
-		return new ExcludeEnumSetPredicate<T>(EnumSet.complementOf(eset));
-	}
-	
-	public static <T extends Enum<T>> DisplayPredicate<T> include(T first, T... rest) {
-		return new ExcludeEnumSetPredicate<T>(EnumSet.complementOf(EnumSet.of(first, rest)));
-	}
-	
-	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(EnumSet<T> eset) {
-		return new ExcludeEnumSetPredicate<T>(eset);
-	}
-		
+
 
 	
 	
@@ -153,9 +108,5 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 	 * @param dps
 	 * @return
 	 */
-	// Hello! I am a hack to allow the creation of generic array which are otherwise disallowed.
-	public static <T extends Enum<T>> DisplayPredicate<T>[] makeDisplayPredicateArray( DisplayPredicate<T>... dps) {
-		return dps;
-	}
-	
+
 }
