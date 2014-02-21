@@ -1,11 +1,11 @@
 package org.diffenbach.android.widgets;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.diffenbach.android.utils.AtomicIntViewIdGenerator;
 import org.diffenbach.android.utils.ViewIdGenerator;
-import org.diffenbach.android.widgets.OnCheckedChangeListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -254,7 +254,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Template method to return derived type if called on derived type
 	 */
 	@SuppressWarnings("unchecked")
-	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
+	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(OnCheckedChangeListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
 		return (U) this;
 	}
@@ -426,10 +426,48 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * 
 	 */
 	
+	public static abstract class OnCheckedChangeListener<T extends Enum<T>> implements RadioGroup.OnCheckedChangeListener {
+		
+		public abstract void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId);
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			EnumRadioGroup<T> erg = (EnumRadioGroup<T>) group;
+			onCheckedChanged(erg, erg.getCheckedValue(), checkedId);
+		}
+		
+		public MultiOnCheckedChangeListener<T> toMulti( OnCheckedChangeListener<T> added) {
+			return new MultiOnCheckedChangeListener<T>(this, added);
+		}
+	
+		
+		private static class MultiOnCheckedChangeListener<T extends Enum<T>> extends OnCheckedChangeListener<T> {
+			private final List<OnCheckedChangeListener<T>> listeners;
+	
+			protected MultiOnCheckedChangeListener( OnCheckedChangeListener<T> l1, OnCheckedChangeListener<T> l2) {
+				super();
+				this.listeners = new ArrayList<OnCheckedChangeListener<T>>();
+				listeners.add(l1);
+				listeners.add(l2);
+			}
+	
+			public MultiOnCheckedChangeListener<T> toMulti( OnCheckedChangeListener<T> added) {
+				listeners.add(added);
+				return this;
+			}
+	
+			@Override
+			public void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId) {
+				for( OnCheckedChangeListener<T> listener : listeners) {
+					listener.onCheckedChanged(group, currentValue, checkedId);
+				}
+				
+			}
+		}
+	}
 
-	/* OnCheckedChangeListener<T extends Enum<T>> is in its own file. 
-	 * 
-	 */
+
 
 	
 	/**

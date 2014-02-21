@@ -13,11 +13,22 @@ import android.view.View;
  * @param <T> An Enum class (<T extends Enum<T>>)
  * 
  * Extends org.diffenbach.android.widgets.EnumRadioGroup to add the ability
- * to add multiple OnCheckChanged listeners.
+ * to add multiple OnCheckChanged listeners. Note that all listeners can be
+ * replaced, but cannot be individually removed.
  * 
- * Note that it can use regular OnCheckChangedListeners, and will itself
- * handle changing them to Multi listeners if required.
+ * org.diffenbach.android.widgets.multilistener.EnumRadioGroup uses
+ * the same OnCheckChangedListeners as the single--listener 
+ * org.diffenbach.android.widgets.EnumRadioGroup, and will itself handle 
+ * changing them to Multi listeners as required.
  * 
+ * Please note that even for multi-listener, the type of the EnumRadioGroup
+ * passed back to the listener is always the  base single listener type
+ * (org.diffenbach.android.widgets.EnumRadioGroup).
+ * 
+ * This allows the same listener to be freely used with both single and multi types,
+ * at the cost of removing (safe) access to the add/set multi listener methods.
+ * It seems reasonable that you're not likely going to want to add a listener
+ * in a listener callback (though you infrequently  might want to replace it).
  */
 
 public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.widgets.EnumRadioGroup<T> {
@@ -70,7 +81,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 		super(context, defaultValue);
 	}
 
-	protected org.diffenbach.android.widgets.OnCheckedChangeListener<T> onCheckChangedListener;
+	protected OnCheckedChangeListener<T> onCheckChangedListener;
 	
 	/**
 	 * Sets or adds a new OnCheckedChangeListener.
@@ -79,13 +90,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 	 * 		true to retain existing listeners, if any, and add this one
 	 * @param listener the listener to set/add
 	 */
-	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(boolean retainExisting, org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
+	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(boolean retainExisting, OnCheckedChangeListener<T> listener) {
 		return super.setOnCheckedChangeListener( this.onCheckChangedListener =
 				( ! retainExisting || this.onCheckChangedListener == null) 
 				? listener : this.onCheckChangedListener.toMulti(listener));
 	}
 	
-	public <U extends EnumRadioGroup<T>> U addOnCheckedChangeListener(boolean retainExisting, org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
+	public <U extends EnumRadioGroup<T>> U addOnCheckedChangeListener(boolean retainExisting, OnCheckedChangeListener<T> listener) {
 		return setOnCheckedChangeListener(true, listener);
 	}
 
