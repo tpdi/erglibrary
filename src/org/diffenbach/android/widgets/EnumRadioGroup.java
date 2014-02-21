@@ -39,12 +39,6 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return (EnumRadioGroup<E>) a.findViewById(id);
 	}
 	
-	
-	@SuppressWarnings("unchecked")
-	public static <E extends Enum<E>> EnumRadioGroup<E> dummy(EnumRadioGroup<E> e ) {
-		return e;
-	}
-	
 	/** 
 	 * Wraps findById in a cast
 	 * @param v a View
@@ -221,6 +215,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Displays only buttons  corresponding to enum constants that pass the filter
 	 * @param pred a {@DisplayPredicate} for the Enum<T>s
 	 * @return this, for chaining
+	 * Template method to return derived type if called on derived type
 	 */
 	@SuppressWarnings("unchecked")
 	public <U extends EnumRadioGroup<T>> U filter( DisplayPredicate<T> pred) {
@@ -235,6 +230,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Display only buttons corresponding to enums in the given EnumSet.
 	 * @param set am EnumSet<T>
 	 * @return this, for chaining
+	 * Template method to return derived type if called on derived type
 	 */
 	public <U extends EnumRadioGroup<T>> U filter( EnumSet<T> set) {
 		return filter(include(set));
@@ -244,6 +240,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Display only buttons  corresponding to enums not in the given EnumSet.
 	 * @param set am EnumSet<T>
 	 * @return this, for chaining
+	 * Template method to return derived type if called on derived type
 	 */
 	public <U extends EnumRadioGroup<T>> U filterNotIn( EnumSet<T> set) {
 		return filter(includeAllBut(set));
@@ -253,12 +250,18 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Set the (generic parameterized) Change Listener.
 	 * Chains to any existing listener
 	 * @param listener
+	 * @return this, for chaining
+	 * Template method to return derived type if called on derived type
 	 */
 	@SuppressWarnings("unchecked")
 	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
 		return (U) this;
 	}
+	
+	/**
+	 * Protected methods
+	 */
 	
 	/**
 	 * Convenience function to produce a Enum's names if the caller doesn't pass us a list of names.

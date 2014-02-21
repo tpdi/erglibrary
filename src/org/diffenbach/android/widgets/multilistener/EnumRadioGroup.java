@@ -11,10 +11,21 @@ import android.view.View;
  * @author TP Diffenbach
  *
  * @param <T> An Enum class (<T extends Enum<T>>)
+ * 
+ * Extends org.diffenbach.android.widgets.EnumRadioGroup to add the ability
+ * to add multiple OnCheckChanged listeners.
+ * 
+ * Note that it can use regular OnCheckChangedListeners, and will itself
+ * handle changing them to Multi listeners if required.
+ * 
  */
 
 public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.widgets.EnumRadioGroup<T> {
-		
+	
+	/** Unfortunately, we need to redefine these statics, so that clients can
+	 * explicitly specify them without have to specify the EnumRadioGroup,
+	 * only specifying the enum type.
+	 */
 	/** 
 	 * Wraps findById in a cast
 	 * @param a an Activity
@@ -38,12 +49,16 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 		return (EnumRadioGroup<E>) v.findViewById(id);
 	}
 	
+	/**
+	 * Ctor for inflation from XML.
+	 * @param context
+	 * @param attrs
+	 */
 	public EnumRadioGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public EnumRadioGroup(Context context, T defaultValue, int rbNames,
-			int rbLayout) {
+	public EnumRadioGroup(Context context, T defaultValue, int rbNames, int rbLayout) {
 		super(context, defaultValue, rbNames, rbLayout);
 	}
 
