@@ -14,7 +14,9 @@ import android.view.View;
  * @param <T> An Enum class (<T extends Enum<T>>)
  */
 
-public class EnumRadioGroup<T extends Enum<T>> extends EnumRadioGroupABC<T, EnumRadioGroup<T>> {
+public class EnumRadioGroup<T extends Enum<T>> extends EnumRadioGroupABC<T, EnumRadioGroup<T>> 
+	implements IUEnumRadioGroup<T>
+{
 	
 	/** 
 	 * Wraps findById in a cast

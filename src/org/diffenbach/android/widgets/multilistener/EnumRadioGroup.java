@@ -1,6 +1,7 @@
 package org.diffenbach.android.widgets.multilistener;
 
 import org.diffenbach.android.widgets.EnumRadioGroupABC;
+import org.diffenbach.android.widgets.IEnumRadioGroup;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,8 +14,9 @@ import android.view.View;
  * @param <T> An Enum class (<T extends Enum<T>>)
  */
 
-@SuppressWarnings("unused")
-public class EnumRadioGroup<T extends Enum<T>> extends EnumRadioGroupABC<T, EnumRadioGroup<T>> {
+public class EnumRadioGroup<T extends Enum<T>> extends EnumRadioGroupABC<T, EnumRadioGroup<T>> 
+
+{
 		
 	/** 
 	 * Wraps findById in a cast

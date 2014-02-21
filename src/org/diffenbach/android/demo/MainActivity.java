@@ -4,6 +4,8 @@ import static org.diffenbach.android.utils.ViewUtils.setId;
 import static org.diffenbach.android.utils.ViewUtils.setOrientation;
 
 import org.diffenbach.android.widgets.EnumRadioGroupABC.DisplayPredicate;
+import org.diffenbach.android.widgets.IEnumRadioGroup;
+import org.diffenbach.android.widgets.IUEnumRadioGroup;
 import org.diffenbach.android.widgets.OnCheckedChangeListener;
 import org.diffenbach.android.widgets.R;
 import org.diffenbach.android.widgets.multilistener.EnumRadioGroup;
@@ -47,7 +49,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		// but this "upcast" is no longer an upcast:
-		//EnumRadioGroup<Pie> multi = singleListener;
+		IUEnumRadioGroup<Pie> multi = singleListener;
+		//multi = multi.filter(null);
+		singleListener = singleListener.filter(EnumRadioGroup.INCLUDE_ALL);
+		multi = multi.filter(EnumRadioGroup.INCLUDE_ALL);
+		multi = programmaticPies;
+		
 		
 		setContentView(R.layout.activity_main);
 		
@@ -79,7 +86,7 @@ public class MainActivity extends Activity {
 					.filter(EnumRadioGroup.includeAllBut(Pie.APPLE))	 
 				); 
 		
-		
+		//programmaticPies.filter(org.diffenbach.android.widgets.EnumRadioGroup.includeAllBut(Pie.APPLE));
 		setId(P_AGREED_ID, programmaticAgreeds);
 		// and then set the EnumRadioGroup's orientation match the layout.
 		setId(P_PIES_ID, programmaticPies).setOrientation(LinearLayout.HORIZONTAL);
@@ -111,7 +118,7 @@ public class MainActivity extends Activity {
 		//setUpRadioGroupCallback(EnumRadioGroup.<Agreed>findById(this, R.id.agreed1), R.id.agreed1_text);
 		setUpRadioGroupCallback(EnumRadioGroup.<Sex> findById( this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
-		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
+		setUpRadioGroupCallback( programmaticPies, R.id.p_pies_text);
 		setUpRadioGroupCallbackA(singleListener, R.id.p_pies_text);
 		
 		
@@ -141,7 +148,29 @@ public class MainActivity extends Activity {
 
 	
 	
-	private <T extends Enum<T>> void setUpRadioGroupCallbackA( org.diffenbach.android.widgets.EnumRadioGroupABC<T, ?> erg, final int textViewid) {
+	private <T extends Enum<T>> void setUpRadioGroupCallbackA( IUEnumRadioGroup<T> erg, final int textViewid) {
+		erg.setOnCheckedChangeListener( new OnCheckedChangeListener<T>() {
+
+			@Override
+			public void onCheckedChanged(org.diffenbach.android.widgets.EnumRadioGroup<T> group, T currentValue, int checkedId) {
+				
+				// we're given the current value, for most things that's all we'll need
+				String currentValueName = currentValue.toString() ;
+				
+				// Getting the (possibly translated) label is about the only reason
+				// to ever get the child RadioButtons
+				// If you need to do this, findViewByEnum is a (typed) convenience function:
+				// But note the RadioButtons themselves are not generic.
+				RadioButton currentValueRadioButton = group.findViewByEnum(currentValue);
+				
+				String currentValueString = currentValueRadioButton.getText().toString();
+				
+				((TextView) MainActivity.this.findViewById(textViewid))
+					.setText(String.format("%s (%s) (%sdefault) id: %d", 
+							currentValueName, currentValueString, 
+							group.isSetToDefault() ? "" : "not ", checkedId)); 
+			}
+		});
 	}
 
 

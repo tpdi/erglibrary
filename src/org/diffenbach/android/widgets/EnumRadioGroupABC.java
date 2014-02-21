@@ -24,7 +24,7 @@ import android.widget.RadioGroup;
  */
 
 /**
- * EnumRadioGroupABC is teh abstract base class for all EnumRadioGroup specializaions.
+ * EnumRadioGroupABC is the abstract base class for all EnumRadioGroup specializations.
  *  
  *  EnumRadioGroupABC takes two generic parameters:
  *  	an enum, which happens to be a Curiously Recurring Template (Coplien, 1995)
@@ -54,7 +54,8 @@ import android.widget.RadioGroup;
  *  	
  */
 
-public class EnumRadioGroupABC<T extends Enum<T>, U extends EnumRadioGroupABC<T, U>> extends RadioGroup {
+public class EnumRadioGroupABC<T extends Enum<T>, U extends EnumRadioGroupABC<T, U>> 
+	extends RadioGroup  {
 		
 
 	
@@ -136,36 +137,30 @@ public class EnumRadioGroupABC<T extends Enum<T>, U extends EnumRadioGroupABC<T,
 		}
 	}
 	
-	/**
-	 * Return the default enum constant for this Radio Group, as set in the ctor.
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#getDefault()
 	 */
 	public T getDefault() {
 		return defaultValue;
 	}
 	
-	/**
-	 * Determines if the checked button in this group is the default value set in the ctor.
-	 * @return true iff the checked button in this group is the default value
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#isSetToDefault()
 	 */
 	public boolean isSetToDefault() {
 		return getCheckedValue() == defaultValue;
 	}
 	
-	/**
-	 * Resets the checked RadioButton to be the default value.
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#clearCheck()
 	 */
 	@Override
 	public void clearCheck() {
 		check(getViewIdForEnum(defaultValue));
 	}
 	
-	/**
-	 * Please prefer using check(T value).
-	 * Sets the checked button to be the RadioButton with the  given id, 
-	 * IF that button is a member of the group; if not, throws IllegalArgumentException
-	 * If the id is -1, checks the RadioButton corresponding to the default passed in the ctor. 
-	 * @see android.widget.RadioGroup#check(int)
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#check(int)
 	 */
 	@Override
 	public void check(int id) {
@@ -178,51 +173,44 @@ public class EnumRadioGroupABC<T extends Enum<T>, U extends EnumRadioGroupABC<T,
 		}
 	}
 	
-	/**
-	 * Checks the button corresponding to the enum constant passed.
-	 * @param value the enum constant to check
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#check(T)
 	 */
 	public void check(T value) {
 		check( getViewIdForEnum(value) );
 	}
 	
-	/**
-	 * Gets the enum value corresponding to the currently checked RadioButton.
-	 * @return the enum constant corresponding to the currently checked button.
-	 * Note that if you override this to provide non-contiguous ids, 
-	 * you'll also need to override isChildRadioButtonIdValid
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#getCheckedValue()
 	 */
 	public T getCheckedValue() {
 		return resIdToEnumConstant(getCheckedRadioButtonId());
 	}
 	
-	/**
-	 * Returns the id of the radioButton in the group corresponding to the enum constant passed.
-	 * @param enumConstant
-	 * @return id of the radioButton in the group corresponding to the enum constant passed.
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#getViewIdForEnum(T)
 	 */
 	public int getViewIdForEnum(T enumConstant) {
 		return enumConstant.ordinal() + idOffset;
 	}
 	
-	/**
-	 * return the RadioButton  corresponding to the passed-in enum constant.
-	 * @param enumConstant
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#findViewByEnum(T)
 	 */
 	// Convenience function
 	public RadioButton findViewByEnum(T enumConstant) {
 		return (RadioButton) findViewById(getViewIdForEnum(enumConstant));
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#values()
+	 */
 	public T[] values() {
 		return getEnumConstants().clone();
 	}
 
-	/**
-	 * Displays only buttons  corresponding to enum constants that pass the filter
-	 * @param pred a {@DisplayPredicate} for the Enum<T>s
-	 * @return this, for chaining
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#filter(org.diffenbach.android.widgets.EnumRadioGroupABC.DisplayPredicate)
 	 */
 	@SuppressWarnings("unchecked")
 	public U filter( DisplayPredicate<T> pred) {
@@ -233,28 +221,22 @@ public class EnumRadioGroupABC<T extends Enum<T>, U extends EnumRadioGroupABC<T,
 		return (U) this;
 	}
 	
-	/**
-	 * Display only buttons corresponding to enums in the given EnumSet.
-	 * @param set am EnumSet<T>
-	 * @return this, for chaining
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#filter(java.util.EnumSet)
 	 */
 	public U filter( EnumSet<T> set) {
 		return filter(include(set));
 	}
 	
-	/**
-	 * Display only buttons  corresponding to enums not in the given EnumSet.
-	 * @param set am EnumSet<T>
-	 * @return this, for chaining
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#filterNotIn(java.util.EnumSet)
 	 */
 	public U filterNotIn( EnumSet<T> set) {
 		return filter(includeAllBut(set));
 	}
 	
-	/**
-	 * Set the (generic parameterized) Change Listener.
-	 * Chains to any existing listener
-	 * @param listener
+	/* (non-Javadoc)
+	 * @see org.diffenbach.android.widgets.IEnumRadioGroup#setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener)
 	 */
 	public void setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
