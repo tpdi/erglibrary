@@ -39,6 +39,12 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return (EnumRadioGroup<E>) a.findViewById(id);
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public static <E extends Enum<E>> EnumRadioGroup<E> dummy(EnumRadioGroup<E> e ) {
+		return e;
+	}
+	
 	/** 
 	 * Wraps findById in a cast
 	 * @param v a View
@@ -216,12 +222,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @param pred a {@DisplayPredicate} for the Enum<T>s
 	 * @return this, for chaining
 	 */
-	public EnumRadioGroup<T> filter( DisplayPredicate<T> pred) {
+	@SuppressWarnings("unchecked")
+	public <U extends EnumRadioGroup<T>> U filter( DisplayPredicate<T> pred) {
 		for( T ec : getEnumConstants()) {
 			findViewByEnum(ec).setVisibility(pred.apply(ec) ? View.VISIBLE : View.GONE);
 		}
 		
-		return this;
+		return (U) this;
 	}
 	
 	/**
@@ -229,7 +236,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @param set am EnumSet<T>
 	 * @return this, for chaining
 	 */
-	public EnumRadioGroup<T> filter( EnumSet<T> set) {
+	public <U extends EnumRadioGroup<T>> U filter( EnumSet<T> set) {
 		return filter(include(set));
 	}
 	
@@ -238,7 +245,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @param set am EnumSet<T>
 	 * @return this, for chaining
 	 */
-	public EnumRadioGroup<T> filterNotIn( EnumSet<T> set) {
+	public <U extends EnumRadioGroup<T>> U filterNotIn( EnumSet<T> set) {
 		return filter(includeAllBut(set));
 	}
 	
@@ -247,9 +254,10 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Chains to any existing listener
 	 * @param listener
 	 */
-	public void setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
+	@SuppressWarnings("unchecked")
+	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(org.diffenbach.android.widgets.OnCheckedChangeListener<T> listener) {
 		super.setOnCheckedChangeListener(listener);
-		
+		return (U) this;
 	}
 	
 	/**
