@@ -2,4 +2,40 @@
 <resources>
     <string name="app_name">Diffenbch Widget Library</string>  
     <string name="dummy">Diffenbch Widget Library</string>  
+    
+    <!--  for demo only -->
+    <string name="hello_world">Hello world!</string>
+    <string name="pielabel">Pick Pie:</string>
+    <string name="sexlabel">Sex:</string>
+    <string-array name="agreed">
+        <item >No</item>
+        <item >Yes</item>
+        <item >Maybe</item>
+    </string-array>
+    
+    <string-array name="agreed_without_no">
+        <item ></item>
+        <item >Yes</item>
+        <item >Maybe</item>
+    </string-array>
+    
+    <string-array name="pie">
+        <item >Apple</item>
+        <item >Cherry</item>
+        <item >Potato</item>
+    </string-array>
+    
+    <string-array name="sex">
+        <item >Required</item>
+        <item >Female</item>
+        <item >Male</item>
+    </string-array>
+    
+    <string-array name="pet">
+        <item >No pets</item>
+        <item >Cat(s)</item>
+        <item >Dogs(s)</item>
+        <item >Both</item>
+    </string-array>
+    
 </resources>
