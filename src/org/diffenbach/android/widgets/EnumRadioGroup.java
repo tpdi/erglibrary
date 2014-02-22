@@ -35,8 +35,14 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public static <E extends Enum<E>> EnumRadioGroup<E> findById( Activity a, int id) {
+	public static <E extends Enum<E>> EnumRadioGroup<E> findByIdE( Activity a, int id) {
 		return (EnumRadioGroup<E>) a.findViewById(id);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public static <U extends EnumRadioGroup<?>> U findById( Activity a, int id) {
+		return (U) a.findViewById(id);
 	}
 	
 	/** 
@@ -46,8 +52,13 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @return a child View that we hope is an EnumRadioGroup, or throw ClassCastException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E extends Enum<E>> EnumRadioGroup<E> findById( View v, int id) {
+	public static <E extends Enum<E>> EnumRadioGroup<E> findByIdE( View v, int id) {
 		return (EnumRadioGroup<E>) v.findViewById(id);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <U extends EnumRadioGroup<?>> U findById( View v, int id) {
+		return (U) v.findViewById(id);
 	}
 	
 	/**

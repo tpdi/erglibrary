@@ -45,7 +45,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public static <E extends Enum<E>> EnumRadioGroup<E> findById( Activity a, int id) {
+	public static <E extends Enum<E>> EnumRadioGroup<E> findByIdE( Activity a, int id) {
 		return (EnumRadioGroup<E>) a.findViewById(id);
 	}
 	
@@ -56,7 +56,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 	 * @return a child View that we hope is an EnumRadioGroup, or throw ClassCastException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E extends Enum<E>> EnumRadioGroup<E> findById( View v, int id) {
+	public static <E extends Enum<E>> EnumRadioGroup<E> findByIdE( View v, int id) {
 		return (EnumRadioGroup<E>) v.findViewById(id);
 	}
 	
@@ -96,7 +96,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.wi
 				? listener : this.onCheckChangedListener.toMulti(listener));
 	}
 	
-	public <U extends EnumRadioGroup<T>> U addOnCheckedChangeListener(boolean retainExisting, OnCheckedChangeListener<T> listener) {
+	public <U extends EnumRadioGroup<T>> U addOnCheckedChangeListener(OnCheckedChangeListener<T> listener) {
 		return setOnCheckedChangeListener(true, listener);
 	}
 
