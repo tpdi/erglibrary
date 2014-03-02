@@ -519,8 +519,11 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 		return INCLUDE_ALL;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(List<T> exclude) {
-		return new ExcludeEnumSetPredicate<T>(EnumSet.copyOf(exclude));
+		return exclude.isEmpty() 
+				? INCLUDE_ALL //EnumSet can't cope with empty Collections that are not EnumSets
+				: new ExcludeEnumSetPredicate<T>(EnumSet.copyOf(exclude));
 	}
 	
 	public static <T extends Enum<T>> DisplayPredicate<T> includeAllBut(T first, T... exclude) {
