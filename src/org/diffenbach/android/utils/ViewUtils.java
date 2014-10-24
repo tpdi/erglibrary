@@ -6,6 +6,7 @@ package org.diffenbach.android.utils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup.LayoutParams;
+import android.widget.TextView;
 
 /**
  * @author TP Diffenbach
@@ -14,7 +15,7 @@ import android.widget.RadioGroup.LayoutParams;
  * Best used with an import static org.diffenbach.android.utils.*;
  * Because Android doesn't chain setters.
  * Template methods to return the same derived type as passed.
- * Views are passed as the second argument, to keep the setting close to
+ * Views are passed as the last argument, to keep the setting close to
  * the method name:
  * 		setLayoutParams(lp, setOrientation(LinearLayout.HORIZONTAL, setId(1, v));
  * not
@@ -36,5 +37,17 @@ public class ViewUtils {
 		v.setLayoutParams(lp);
 		return v;
 	}
+	
+	public static <V extends View> V setPadding(int left, int top, int right, int bottom, final V v) {
+		v.setPadding(left, top, right, bottom);
+		return v;
+	}
+	
+	public static <TV extends TextView> TV setText(CharSequence text, final TV tv) {
+		tv.setText(text);
+		return tv;
+	}
+	
+	
 
 }
