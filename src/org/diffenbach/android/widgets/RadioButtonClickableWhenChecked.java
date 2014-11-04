@@ -2,8 +2,9 @@ package org.diffenbach.android.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.ViewParent;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class RadioButtonClickableWhenChecked extends RadioButton {
 
@@ -22,28 +23,23 @@ public class RadioButtonClickableWhenChecked extends RadioButton {
 		// TODO Auto-generated constructor stub
 	}
 
-    @Override
-    public void toggle() {
-        // we override to prevent toggle when the radio is already
-        // checked (as opposed to check boxes widgets)
-    	Log.i("xxx", "entering toggle, checked is " + isChecked());
-        if (!isChecked()) {
-        	Log.i("xxx", "not checked, calling super.toggle, checked is " + isChecked());
-            super.toggle();
-            Log.i("xxx", "not checked, called super.toggle, checked is " + isChecked());
+	@Override
+    public boolean performClick() {
+
+        if(isChecked()) {
+            boolean ret = super.performClick();
+            ViewParent p = getParent();
+            while (p != null && ! (p instanceof RadioGroup)) {
+                p = p.getParent();
+            }
+            if (p != null) {
+                RadioGroup erg = (RadioGroup) p;
+                erg.check(-1);
+                erg.check(this.getId());
+            }
+            return ret;
         } else {
-        	try {
-        		Log.i("xxx", " checked is " + isChecked() + "\nsetting false");
-        		setChecked(false);
-        		Log.i("xxx", "checked is " + isChecked() + "\nsetting true");
-        		setChecked(true);
-        		Log.i("xxx", "set true, checked is " + isChecked());
-        		int i = 2;
-        	} catch(Throwable e) {
-        		Log.e("xxx", e.getLocalizedMessage());
-        	}
+            return super.performClick();
         }
-        Log.i("xxx", "exiting toggle, checked is " + isChecked() + "\n");
-        int j = 3;
     }
 }
