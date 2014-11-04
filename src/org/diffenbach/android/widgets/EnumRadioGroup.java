@@ -200,6 +200,14 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	}
 	
 	/**
+	 * Returns true if the the currently selected button is visible.
+	 * @return true if the the currently selected button is visible.
+	 */
+	public boolean isCheckedValueVisible() {
+		return findCheckedButton().getVisibility() == View.VISIBLE;
+	}
+	
+	/**
 	 * Returns the id of the radioButton in the group corresponding to the enum constant passed.
 	 * @param enumConstant
 	 * @return id of the radioButton in the group corresponding to the enum constant passed.
@@ -216,6 +224,14 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// Convenience function
 	public RadioButton findViewByEnum(T enumConstant) {
 		return (RadioButton) findViewById(getViewIdForEnum(enumConstant));
+	}
+	
+	/**
+	 * Return the checked RadioButton
+	 * @return
+	 */
+	public RadioButton findCheckedButton() {
+		return (RadioButton) findViewById(getCheckedRadioButtonId());
 	}
 	
 	public T[] values() {
