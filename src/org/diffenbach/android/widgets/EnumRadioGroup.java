@@ -204,7 +204,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @return true if the the currently selected button is visible.
 	 */
 	public boolean isCheckedValueVisible() {
-		return findCheckedButton().getVisibility() == View.VISIBLE;
+		return findCheckedRadioButton().getVisibility() == View.VISIBLE;
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * Return the checked RadioButton
 	 * @return
 	 */
-	public RadioButton findCheckedButton() {
+	public RadioButton findCheckedRadioButton() {
 		return (RadioButton) findViewById(getCheckedRadioButtonId());
 	}
 	
