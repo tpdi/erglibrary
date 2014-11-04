@@ -58,8 +58,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class layout {
         public static int horizontal_radio_button=0x7f030000;
-        public static int vertical_radio_button=0x7f030001;
-        public static int wrapped_radio_button=0x7f030002;
+        public static int horizontal_radio_button_clickable_when_checked=0x7f030001;
+        public static int vertical_radio_button=0x7f030002;
+        public static int vertical_radio_button_clickable_when_checked=0x7f030003;
+        public static int wrapped_radio_button=0x7f030004;
+        public static int wrapped_radio_button_clickable_when_checked=0x7f030005;
     }
     public static final class string {
         public static int app_name=0x7f050000;
@@ -129,7 +132,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name org.diffenbach.android.widgets:enumClassName
         */
-        public static final int EnumRadioGroup_enumClassName = 0;
+        public static int EnumRadioGroup_enumClassName = 0;
         /**
           <p>This symbol is the offset where the {@link org.diffenbach.android.widgets.R.attr#enumDefaultIsShown}
           attribute's value can be found in the {@link #EnumRadioGroup} array.
@@ -143,7 +146,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name org.diffenbach.android.widgets:enumDefaultIsShown
         */
-        public static final int EnumRadioGroup_enumDefaultIsShown = 2;
+        public static int EnumRadioGroup_enumDefaultIsShown = 2;
         /**
           <p>This symbol is the offset where the {@link org.diffenbach.android.widgets.R.attr#enumDefaultValueString}
           attribute's value can be found in the {@link #EnumRadioGroup} array.
@@ -157,7 +160,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name org.diffenbach.android.widgets:enumDefaultValueString
         */
-        public static final int EnumRadioGroup_enumDefaultValueString = 1;
+        public static int EnumRadioGroup_enumDefaultValueString = 1;
         /**
           <p>This symbol is the offset where the {@link org.diffenbach.android.widgets.R.attr#radioButtonLayout}
           attribute's value can be found in the {@link #EnumRadioGroup} array.
@@ -167,7 +170,7 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name org.diffenbach.android.widgets:radioButtonLayout
         */
-        public static final int EnumRadioGroup_radioButtonLayout = 3;
+        public static int EnumRadioGroup_radioButtonLayout = 3;
         /**
           <p>This symbol is the offset where the {@link org.diffenbach.android.widgets.R.attr#radioButtonNames}
           attribute's value can be found in the {@link #EnumRadioGroup} array.
@@ -177,6 +180,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name org.diffenbach.android.widgets:radioButtonNames
         */
-        public static final int EnumRadioGroup_radioButtonNames = 4;
+        public static int EnumRadioGroup_radioButtonNames = 4;
     };
 }
