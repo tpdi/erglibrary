@@ -12,9 +12,12 @@ import android.widget.TextView;
  * @author TP Diffenbach
  *
  * Utilities that mutate views and return the view, for chaining.
- * Best used with an import static org.diffenbach.android.utils.*;
  * Because Android doesn't chain setters.
+ * 
+ * Best used with an import static org.diffenbach.android.utils.*;
+ * 
  * Template methods to return the same derived type as passed.
+ * 
  * Views are passed as the last argument, to keep the setting close to
  * the method name:
  * 		setLayoutParams(lp, setOrientation(LinearLayout.HORIZONTAL, setId(1, v));
