@@ -1,4 +1,4 @@
-package org.diffenbach.android.widgets;
+package org.diffenbach.android.widgets.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

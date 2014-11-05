@@ -1,4 +1,4 @@
-package org.diffenbach.android.utils;
+package org.diffenbach.android.widgets.utils;
 
 /* Based on code Copyright (C) 2006 The Android Open Source Project*/
 

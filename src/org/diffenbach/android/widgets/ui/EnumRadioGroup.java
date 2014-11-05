@@ -1,11 +1,12 @@
-package org.diffenbach.android.widgets;
+package org.diffenbach.android.widgets.ui;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.diffenbach.android.utils.AtomicIntViewIdGenerator;
-import org.diffenbach.android.utils.ViewIdGenerator;
+import org.diffenbach.android.widgets.R;
+import org.diffenbach.android.widgets.utils.AtomicIntViewIdGenerator;
+import org.diffenbach.android.widgets.utils.ViewIdGenerator;
 
 import android.app.Activity;
 import android.content.Context;

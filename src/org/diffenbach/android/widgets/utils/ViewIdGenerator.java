@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.diffenbach.android.utils;
+package org.diffenbach.android.widgets.utils;
 
 /**
  * @author tpd

@@ -1,4 +1,4 @@
-package org.diffenbach.android.widgets.multilistener;
+package org.diffenbach.android.widgets.ui.multilistener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,7 +31,7 @@ import android.view.View;
  * in a listener callback (though you infrequently  might want to replace it).
  */
 
-public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.widgets.EnumRadioGroup<T> {
+public class EnumRadioGroup<T extends Enum<T>> extends org.diffenbach.android.widgets.ui.EnumRadioGroup<T> {
 	
 	/** Unfortunately, we need to redefine these statics, so that clients can
 	 * explicitly specify them without have to specify the EnumRadioGroup,
