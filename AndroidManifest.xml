@@ -3,17 +3,11 @@
     package="org.diffenbach.android.widgets"
     android:versionCode="1"
     android:versionName="1.0" >
+    
+    
 
     <uses-sdk
         android:minSdkVersion="4"
         android:targetSdkVersion="19" />
-
-    <application
-        android:allowBackup="true" 
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-	 >
-
-    </application>
 
 </manifest>
