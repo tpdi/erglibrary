@@ -161,7 +161,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 */
 	@Override
 	public void clearCheck() {
-		check(getViewIdForEnum(defaultValue));
+		super.check(getViewIdForEnum(defaultValue));
 	}
 	
 	/**
@@ -187,7 +187,7 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 * @param value the enum constant to check
 	 */
 	public void check(T value) {
-		check( getViewIdForEnum(value) );
+		super.check( getViewIdForEnum(value) );
 	}
 	
 	/**
