@@ -85,6 +85,9 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	// all other RadioButton ids are consecutive increasing
 	protected int idOffset;  
 	// so we can chain listeners, we need to keep a copy of the  listener;
+	protected OnCheckedChangeListener<T> onCheckedChangeListener;
+	// the whole point of multi.EnumRadioGroup was to not carry this around
+	// but we need it for callOnChecked because RadioGroup gives no way to retrieve it
 	
 	/**
 	 * Ctor that takes:
@@ -283,8 +286,29 @@ public class EnumRadioGroup<T extends Enum<T>> extends RadioGroup {
 	 */
 	@SuppressWarnings("unchecked")
 	public <U extends EnumRadioGroup<T>> U setOnCheckedChangeListener(OnCheckedChangeListener<T> listener) {
-		super.setOnCheckedChangeListener(listener);
+		super.setOnCheckedChangeListener(onCheckedChangeListener = listener);
 		return (U) this;
+	}
+	
+	/**
+	 * Force a call to onCheckedChangeListener
+	 * @return this, for chaining
+	 * Template method to return derived type if called on derived type
+	 */
+	@SuppressWarnings("unchecked")
+	public <U extends EnumRadioGroup<T>> U callOnChecked() {
+		onCheckedChangeListener.onCheckedChanged(this, getCheckedValue(), getCheckedRadioButtonId());
+		return (U) this;
+	}
+	
+	/**
+	 * Sets the value without calling any listeners, as on a restore from bundle
+	 * @param checkedValue
+	 */
+	public void setCheckedSilently(T checkedValue) {
+		super.setOnCheckedChangeListener(null); // temporarily null out the listener on supertype 
+		check(checkedValue);
+		super.setOnCheckedChangeListener(onCheckedChangeListener); //restore listener
 	}
 	
 	/**

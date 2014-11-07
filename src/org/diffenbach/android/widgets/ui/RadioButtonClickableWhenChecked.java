@@ -2,6 +2,7 @@ package org.diffenbach.android.widgets.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewParent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -10,32 +11,33 @@ public class RadioButtonClickableWhenChecked extends RadioButton {
 
 	public RadioButtonClickableWhenChecked(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 	public RadioButtonClickableWhenChecked(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 
 	public RadioButtonClickableWhenChecked(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
     public boolean performClick() {
 
         if(isChecked()) {
+        	Log.i("RadioButtonClickableWhenChecked", "about to call super.performClick()");
             boolean ret = super.performClick();
             ViewParent p = getParent();
-            while (p != null && ! (p instanceof RadioGroup)) {
+            while (p != null && ! (p instanceof EnumRadioGroup<?>)) {
                 p = p.getParent();
             }
             if (p != null) {
-                RadioGroup erg = (RadioGroup) p;
-                erg.check(-1);
-                erg.check(this.getId());
+            	@SuppressWarnings("rawtypes")
+				EnumRadioGroup erg = (EnumRadioGroup<?>) p;
+                Log.i("RadioButtonClickableWhenChecked", "about to call callOnChecked");
+                erg.callOnChecked();
+                Log.i("RadioButtonClickableWhenChecked", "called callOnChecked");
+                //erg.check(this.getId());
             }
             return ret;
         } else {
