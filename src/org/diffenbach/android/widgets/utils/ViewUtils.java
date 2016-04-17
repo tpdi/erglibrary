@@ -5,6 +5,8 @@ package org.diffenbach.android.widgets.utils;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RadioGroup.LayoutParams;
 import android.widget.TextView;
 
@@ -46,11 +48,33 @@ public class ViewUtils {
 		return v;
 	}
 	
+	public static <V extends View> V setOnClickListener(View.OnClickListener listener, final V v) {
+		v.setOnClickListener(listener);
+		return v;
+	}
+	
 	public static <TV extends TextView> TV setText(CharSequence text, final TV tv) {
 		tv.setText(text);
 		return tv;
 	}
 	
-	
+	public static <TV extends TextView> TV setText(int resId, final TV tv) {
+		tv.setText(resId);
+		return tv;
+	}
 
+	public static <LV extends ListView> LV addHeaderView(View v, LV lv) {
+		lv.addHeaderView(v);
+		return lv;
+	}
+	
+	public static <LV extends ListView> LV addFooterView(View v, LV lv) {
+		lv.addFooterView(v);
+		return lv;
+	}
+	
+	public static <LV extends ListView> LV setAdapter(ListAdapter la, LV lv) {
+		lv.setAdapter(la);;
+		return lv;
+	}
 }
